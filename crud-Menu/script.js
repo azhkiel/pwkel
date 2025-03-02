@@ -1,72 +1,56 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("mentalHealthForm");
-    const dataList = document.getElementById("dataList");
-    const ctx = document.getElementById("moodChart").getContext("2d");
-    let entries = [];
-    let moodCounts = { Happy: 0, Sad: 0, Anxious: 0, Depressed: 0 };
-    let moodChart;
+let pesanan = [];
+let idEdit = null;
 
-    function initializeChart() {
-        moodChart = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: Object.keys(moodCounts),
-                datasets: [{
-                    label: "Jumlah Mood",
-                    data: Object.values(moodCounts),
-                    backgroundColor: ["#4CAF50", "#FF5722", "#FFC107", "#2196F3"],
-                }],
-            },
-        });
-    }
+function renderPesanan() {
+    const pesananList = document.getElementById("pesananList");
+    pesananList.innerHTML = "";
 
-    function updateChart() {
-        moodChart.data.datasets[0].data = Object.values(moodCounts);
-        moodChart.update();
-    }
-
-    function renderTable() {
-        dataList.innerHTML = "";
-        resetMoodCounts();
-        entries.forEach((entry, index) => {
-            moodCounts[entry.feeling]++;
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${entry.name}</td>
-                <td>${entry.feeling}</td>
+    pesanan.forEach((item, index) => {
+        pesananList.innerHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${item.nama}</td>
+                <td>Rp ${item.harga}</td>
                 <td>
-                    <button onclick="deleteEntry(${index})">Hapus</button>
+                    <button class="edit" onclick="editPesanan(${index})">Edit</button>
+                    <button onclick="hapusPesanan(${index})">Hapus</button>
                 </td>
-            `;
-            dataList.appendChild(row);
-        });
-        updateChart();
-    }
-
-    function resetMoodCounts() {
-        moodCounts = { Happy: 0, Sad: 0, Anxious: 0, Depressed: 0 };
-    }
-
-    function addEntry(name, feeling) {
-        if (name && feeling) {
-            entries.push({ name, feeling });
-            renderTable();
-            form.reset();
-        }
-    }
-
-    function deleteEntry(index) {
-        entries.splice(index, 1);
-        renderTable();
-    }
-
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const name = document.getElementById("name").value;
-        const feeling = document.getElementById("feeling").value;
-        addEntry(name, feeling);
+            </tr>
+        `;
     });
+}
 
-    window.deleteEntry = deleteEntry;
-    initializeChart();
-});
+function tambahPesanan() {
+    const namaMakanan = document.getElementById("namaMakanan").value;
+    const hargaMakanan = document.getElementById("hargaMakanan").value;
+
+    if (namaMakanan.trim() === "" || hargaMakanan.trim() === "") {
+        alert("Mohon isi semua field!");
+        return;
+    }
+
+    if (idEdit === null) {
+        pesanan.push({ nama: namaMakanan, harga: hargaMakanan });
+    } else {
+        pesanan[idEdit] = { nama: namaMakanan, harga: hargaMakanan };
+        idEdit = null;
+    }
+
+    document.getElementById("namaMakanan").value = "";
+    document.getElementById("hargaMakanan").value = "";
+    
+    renderPesanan();
+}
+
+function editPesanan(index) {
+    document.getElementById("namaMakanan").value = pesanan[index].nama;
+    document.getElementById("hargaMakanan").value = pesanan[index].harga;
+    idEdit = index;
+}
+
+function hapusPesanan(index) {
+    pesanan.splice(index, 1);
+    renderPesanan();
+}
+
+renderPesanan();
