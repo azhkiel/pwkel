@@ -15,12 +15,16 @@
         <h2>Tambah Pesanan</h2>
         <form id="orderForm" class="order-form">
             <label for="menuItem">Pilih Menu:</label>
-            <select id="menuItem" required>
+            <select id="menuItem" required
+                oninvalid="this.setCustomValidity('Mohon pilih menu')"
+                oninput="this.setCustomValidity('')">
                 <option value="" disabled selected>Pilih menu...</option>
             </select>
 
             <label for="quantity">Jumlah:</label>
-            <input type="number" id="quantity" min="1" required>
+            <input type="number" id="quantity" min="1" required
+            oninvalid="this.setCustomValidity('Mohon isi harga')"
+            oninput="this.setCustomValidity('')">
 
             <button type="submit">Tambah Pesanan</button>
         </form>

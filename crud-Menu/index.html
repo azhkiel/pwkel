@@ -12,8 +12,12 @@
         <h1>Menu Pesanan Makanan</h1>
 
         <div class="form-container">
-            <input type="text" id="namaMakanan" placeholder="Nama Makanan">
-            <input type="number" id="hargaMakanan" placeholder="Harga">
+            <input type="text" id="namaMakanan" placeholder="Nama Makanan" required
+                oninvalid="this.setCustomValidity('Mohon isi nama makanan !')"
+                oninput="this.setCustomValidity('')">
+            <input type="number" id="hargaMakanan" placeholder="Harga" required
+                oninvalid="this.setCustomValidity('Mohon isi harga makanan !')"
+                oninput="this.setCustomValidity('')">
             <button onclick="tambahPesanan()">Tambah Pesanan</button>
         </div>
 
